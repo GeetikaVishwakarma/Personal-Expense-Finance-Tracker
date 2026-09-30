@@ -42,7 +42,7 @@ The project was initially developed as a Python command-line application and was
 
 * HTML
 * CSS
-* Bootstrap *(if used)*
+
 
 ### Database
 
@@ -182,10 +182,7 @@ Personal-Expense-Finance-Tracker/
 │
 ├── static/
 │   ├── css/
-│   │   └── style.css
-│   │
-│   └── js/
-│       └── script.js
+│   └── style.css   
 │
 └── instance/
     └── finance.db
