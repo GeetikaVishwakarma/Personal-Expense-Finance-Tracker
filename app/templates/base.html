@@ -1,0 +1,136 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>
+        {% block title %}
+        Finance Tracker
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+<nav class="navbar">
+
+    <div class="container nav-inner">
+
+        <a
+            class="brand"
+            href="
+            {% if current_user.is_authenticated %}
+                {{ url_for('main.dashboard') }}
+            {% else %}
+                {{ url_for('auth.login') }}
+            {% endif %}
+            "
+        >
+            Finance Tracker
+        </a>
+
+
+        {% if current_user.is_authenticated %}
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('main.dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('main.transactions') }}">
+                Transactions
+            </a>
+
+            <a
+                class="btn btn-small"
+                href="{{ url_for('main.add_transaction') }}"
+            >
+                + Add
+            </a>
+
+            <a href="{{ url_for('auth.logout') }}">
+                Logout
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<main class="container page">
+
+
+    {% with messages =
+        get_flashed_messages(
+            with_categories=true
+        )
+    %}
+
+
+        {% if messages %}
+
+            <div class="flash-stack">
+
+                {% for category, message in messages %}
+
+                    <div class="flash {{ category }}">
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+    {% endwith %}
+
+
+    {% block content %}
+
+    {% endblock %}
+
+
+</main>
+
+
+<footer>
+
+    <div class="container">
+
+        <p>
+            Personal Expense & Finance Tracker
+        </p>
+
+    </div>
+
+</footer>
+
+
+</body>
+
+</html>

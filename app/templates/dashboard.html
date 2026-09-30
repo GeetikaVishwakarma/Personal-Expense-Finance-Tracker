@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Dashboard | Finance Tracker
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="page-header">
+
+    <div>
+
+        <h1>
+            Dashboard
+        </h1>
+
+        <p class="muted">
+            Welcome, {{ current_user.username }}.
+        </p>
+
+    </div>
+
+
+    <a
+        class="btn"
+        href="{{ url_for('main.add_transaction') }}"
+    >
+        + Add Transaction
+    </a>
+
+</div>
+
+
+<div class="stats-grid">
+
+
+    <div class="stat-card">
+
+        <span>
+            Total Income
+        </span>
+
+        <strong class="income">
+
+            ₹{{ "%.2f"|format(total_income) }}
+
+        </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span>
+            Total Expenses
+        </span>
+
+        <strong class="expense">
+
+            ₹{{ "%.2f"|format(total_expense) }}
+
+        </strong>
+
+    </div>
+
+
+    <div class="stat-card">
+
+        <span>
+            Current Balance
+        </span>
+
+        <strong
+            class="
+            {{ 'income' if balance >= 0 else 'expense' }}
+            "
+        >
+
+            ₹{{ "%.2f"|format(balance) }}
+
+        </strong>
+
+    </div>
+
+
+</div>
+
+
+<div class="dashboard-grid">
+
+
+    <section class="card">
+
+
+        <div class="section-header">
+
+            <h2>
+                Recent Transactions
+            </h2>
+
+            <a
+                href="{{ url_for('main.transactions') }}"
+            >
+                View all
+            </a>
+
+        </div>
+
+
+        {% if recent_transactions %}
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for transaction in recent_transactions %}
+
+
+                    <tr>
+
+                        <td>
+
+                            {{
+                                transaction.transaction_date.strftime(
+                                    "%d %b %Y"
+                                )
+                            }}
+
+                        </td>
+
+
+                        <td>
+                            {{ transaction.category }}
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="
+                                badge
+                                {{ transaction.transaction_type }}
+                                "
+                            >
+
+                                {{
+                                    transaction.transaction_type.title()
+                                }}
+
+                            </span>
+
+                        </td>
+
+
+                        <td
+                            class="{{ transaction.transaction_type }}"
+                        >
+
+                            {% if transaction.transaction_type == "expense" %}
+                                -
+                            {% else %}
+                                +
+                            {% endif %}
+
+                            ₹{{ "%.2f"|format(transaction.amount) }}
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="empty">
+
+            No transactions yet.
+
+            Add your first transaction.
+
+        </div>
+
+
+        {% endif %}
+
+
+    </section>
+
+
+    <section class="card">
+
+
+        <div class="section-header">
+
+            <h2>
+                Top Expense Categories
+            </h2>
+
+        </div>
+
+
+        {% if category_totals %}
+
+
+        <div class="category-list">
+
+
+            {% for category, total in category_totals %}
+
+
+            <div class="category-row">
+
+                <span>
+                    {{ category }}
+                </span>
+
+                <strong>
+                    ₹{{ "%.2f"|format(total) }}
+                </strong>
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <div class="empty">
+
+            No expense data yet.
+
+        </div>
+
+
+        {% endif %}
+
+
+    </section>
+
+
+</div>
+
+
+{% endblock %}
